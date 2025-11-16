@@ -150,11 +150,11 @@ function takeDamage() {
     renderLives();
     invulnerable = true;
 
-    soul.style.backgroundColor = 'gray';
+    soul.style.filter = 'grayscale(100%)';
     textBox.textContent = `Você foi atingido! Vidas: ${lives}`;
 
     setTimeout(() => {
-        soul.style.backgroundColor = 'red';
+        soul.style.filter = 'none';
         invulnerable = false;
     }, 800);
 

@@ -16,14 +16,16 @@ body {
 }
 
 #soul {
-    width: 16px;
-    height: 16px;
-    background-color: red;
+    width: 20px; /* ajuste conforme o tamanho da imagem */
+    height: 20px;
+    background-image: url('img/soul.png'); /* nome da imagem */
+    background-size: contain; 
+    background-repeat: no-repeat;
+    background-position: center;
+    
     position: absolute;
     bottom: 10px;
     left: 190px;
-    border-radius: 3px;
-    transition: background-color 0.2s;
 }
 
 .bullet {
