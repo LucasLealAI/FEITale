@@ -1,0 +1,42 @@
+body {
+    background-color: black;
+    color: white;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    overflow: hidden;
+}
+
+#intro {
+    border: 5px solid white;
+    justify-content: center;
+    align-items: center;
+}
+
+p, h1{
+    font-family: 'Courier New', monospace;
+    font-size: 20px;
+    text-align: center;
+}
+
+#tabela {
+    border: 3px dashed white;
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+#tabela th, td {
+    font-family: 'Courier New', monospace;
+    border: 1px solid black;
+    padding: 8px 16px;
+    text-align: left;
+}
+
+#tabela th {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
+
+#jogo {
+    font-size: 30px;
+}

@@ -4,7 +4,7 @@ const textBox = document.getElementById('text-box');
 const livesDiv = document.getElementById('lives');
 
 let x = 190, y = 220;
-const speed = 4;
+const speed = 10;
 
 const bullets = [];
 const bulletSpeed = 2;
@@ -16,11 +16,26 @@ let gameOver = false;
 let turn = "menu"; 
 
 const enemy = {
-    name: "Dummy Corrompido",
+    name: "Zero",
     hp: 10,
-    anger: 1, // aumenta número de tiros
+    anger: 1, // aumenta dificuldade
     pacified: false
 };
+
+const enemySprite = document.getElementById("enemy-sprite");
+
+function setEnemySprite(state) {
+    if (state === "idle") {
+        enemySprite.src = "sprites/zero_idle.png";
+    }
+    if (state === "attack") {
+        enemySprite.src = "sprites/zero_attack.gif";
+    }
+    if (state === "hurt") {
+        enemySprite.src = "sprites/zero_hit.gif";
+        setTimeout(() => setEnemySprite("idle"), 400);
+    }
+}
 
 function renderLives() {
     livesDiv.innerHTML = '';
@@ -60,18 +75,19 @@ document.addEventListener('keydown', (e) => {
 function showMenu() {
     turn = "menu";
     textBox.innerHTML = 
-        `➤ O que você fará?<br><br>` +
+        `O que você fará?<br><br>` +
         `1 - FIGHT<br>` +
         `2 - ACT`;
 }
 showMenu();
 
 function playerFight() {
+    setEnemySprite("hurt")
+
     enemy.hp -= 4;
     textBox.textContent = `Você atacou! ${enemy.name} perdeu 4 HP.`;
 
     if (enemy.hp <= 0) {
-        enemy.hp = 0;
         victory();
         return;
     }
@@ -97,6 +113,8 @@ function playerAct() {
 }
 
 function enemyAttack() {
+    setEnemySprite("attack")
+
     textBox.textContent = `${enemy.name} está atacando!`;
     turn = "enemy";
 
@@ -107,12 +125,14 @@ function enemyAttack() {
 
     let attackDuration = 1800 + enemy.anger * 500;
 
-    let stop = setTimeout(() => {
+    setTimeout(() => {
         clearInterval(shootInterval);
+        setEnemySprite("idle");
         textBox.textContent = `O ataque acabou.`;
         turn = "menu";
         setTimeout(showMenu, 1000);
     }, attackDuration);
+
 }
 
 function spawnBullet() {

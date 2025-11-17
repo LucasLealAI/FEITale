@@ -16,9 +16,9 @@ body {
 }
 
 #soul {
-    width: 20px; /* ajuste conforme o tamanho da imagem */
+    width: 20px;
     height: 20px;
-    background-image: url('img/soul.png'); /* nome da imagem */
+    background-image: url('sprites/soul.png');
     background-size: contain; 
     background-repeat: no-repeat;
     background-position: center;
@@ -26,6 +26,19 @@ body {
     position: absolute;
     bottom: 10px;
     left: 190px;
+}
+
+#enemy-box {
+    width: 200px;
+    height: 120px;
+    margin: 0 auto;
+    margin-top: -40px;
+}
+
+#enemy-sprite {
+    image-rendering: pixelated;
+    width: 90px;
+    height: 150px;
 }
 
 .bullet {
