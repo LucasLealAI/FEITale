@@ -2,52 +2,46 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FEITale Canvas 1</title>
-  <link href="style.css" rel="stylesheet">
-  <link href="styleSite.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEITale Canvas 1</title>
+    <link href="style.css" rel="stylesheet">
+    <link href="styleSite.css" rel="stylesheet">
 </head>
 
 <body>
-  <table id="tabela">
-    <tr>
-      <td>
-        Andar
-      </td>
-      <td>
-        ⬅⬆⮕⬇
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Atacar
-      </td>
-      <td>
-        Digite 1
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Agir
-      </td>
-      <td>
-        Digite 2
-      </td>
-    </tr>
 
-    <p>Objetivo: Derrote Zero desviando de seus ataques e escolha se irá atacar ou acalmar Zero!</p><br>
+    <p>Objetivo: Derrote Zero desviando de seus ataques e escolha se irá atacar ou acalmar Zero!</p>
 
+    <p>Guia para comandos:</p>
+    <table id="tabela">
+        <tr>
+            <td>Andar</td>
+            <td>⬅ ⬆ ➡ ⬇</td>
+        </tr>
+        <tr>
+            <td>Atacar</td>
+            <td>Digite 1</td>
+        </tr>
+        <tr>
+            <td>Agir</td>
+            <td>Digite 2</td>
+        </tr>
+    </table>
     <div id="enemy-box">
-      <img id="enemy-sprite" src="sprites/zero_idle.png">
+        <img id="spriteInimigo" src="sprites/zero_idle.png">
     </div>
-    <div id="battle-box">
-      <div id="soul"></div>
+    <div id="caixaBatalha">
+        <div id="alma"></div>
     </div>
-    <div id="text-box">Desvie dos ataques!</div>
-    <div id="lives"></div><br><br>
+    <div id="caixaTexto">Desvie dos ataques!</div>
+    <div id="vidasDiv"></div>
+    <br><br>
+
     <a href="site.html">Voltar para o início</a>
-    <br><p>Guia para os comandos:</p><br>
+
+    <br>
+
     <script src="script.js" type="text/javascript"></script>
 </body>
 

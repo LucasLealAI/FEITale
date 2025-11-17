@@ -1,209 +1,209 @@
-const battleBox = document.getElementById('battle-box');
-const soul = document.getElementById('soul');
-const textBox = document.getElementById('text-box');
-const livesDiv = document.getElementById('lives');
+const caixaBatalha = document.getElementById('caixaBatalha');
+const alma = document.getElementById('alma');
+const caixaTexto = document.getElementById('caixaTexto');
+const vidasDiv = document.getElementById('vidasDiv');
+const spriteInimigo = document.getElementById("spriteInimigo");
 
-let x = 190, y = 220;
-const speed = 10;
+let posX = 190, posY = 220;
+const velocidade = 4;
 
-const bullets = [];
-const bulletSpeed = 2;
+const balas = [];
+const velocidadeBala = 6;
 
-let lives = 3;
-let invulnerable = false;
-let gameOver = false;
+let vidas = 3;
+let invulneravel = false;
+let jogoAcabou = false;
 
-let turn = "menu"; 
+let turno = "menu"; 
 
-const enemy = {
-    name: "Zero",
-    hp: 10,
-    anger: 1, // aumenta dificuldade
-    pacified: false
+const inimigo = {
+    nome: "Zero",
+    vida: 10,
+    agressividade: 1,
+    pacificado: false
 };
 
-const enemySprite = document.getElementById("enemy-sprite");
-
-function setEnemySprite(state) {
-    if (state === "idle") {
-        enemySprite.src = "sprites/zero_idle.png";
-    }
-    if (state === "attack") {
-        enemySprite.src = "sprites/zero_attack.gif";
-    }
-    if (state === "hurt") {
-        enemySprite.src = "sprites/zero_hit.gif";
-        setTimeout(() => setEnemySprite("idle"), 400);
+function renderizarVidas() {
+    vidasDiv.innerHTML = '';
+    for (let i = 0; i < vidas; i++) {
+        const coracao = document.createElement('div');
+        coracao.classList.add('heart');
+        vidasDiv.appendChild(coracao);
     }
 }
+renderizarVidas();
 
-function renderLives() {
-    livesDiv.innerHTML = '';
-    for (let i = 0; i < lives; i++) {
-        const heart = document.createElement('div');
-        heart.classList.add('heart');
-        livesDiv.appendChild(heart);
-    }
-}
-renderLives();
+// movimentar torto
+const teclasPressionadas = {};
 
 document.addEventListener('keydown', (e) => {
-    if (gameOver) return;
+    teclasPressionadas[e.key] = true;
 
-    if (turn === "menu") {
-        if (e.key === "1") playerFight();
-        if (e.key === "2") playerAct();
+    if (turno === "menu") {
+        if (e.key === "1") atacarJogador();
+        if (e.key === "2") agirJogador();
         return;
-    }
-
-    // Durante ataque inimigo
-    if (turn === "enemy") {
-        if (e.key === 'ArrowLeft') x -= speed;
-        if (e.key === 'ArrowRight') x += speed;
-        if (e.key === 'ArrowUp') y -= speed;
-        if (e.key === 'ArrowDown') y += speed;
-
-        // Limites
-        x = Math.max(0, Math.min(x, 384));
-        y = Math.max(0, Math.min(y, 234));
-
-        soul.style.left = x + 'px';
-        soul.style.top = y + 'px';
     }
 });
 
-function showMenu() {
-    turn = "menu";
-    textBox.innerHTML = 
-        `O que você fará?<br><br>` +
+document.addEventListener('keyup', (e) => {
+    teclasPressionadas[e.key] = false;
+});
+
+// atualiza movimento
+function moverAlma() {
+    if (jogoAcabou || turno !== "inimigo") return;
+
+    if (teclasPressionadas["ArrowLeft"])  posX -= velocidade;
+    if (teclasPressionadas["ArrowRight"]) posX += velocidade;
+    if (teclasPressionadas["ArrowUp"])    posY -= velocidade;
+    if (teclasPressionadas["ArrowDown"])  posY += velocidade;
+
+    // limites
+    posX = Math.max(0, Math.min(posX, 384));
+    posY = Math.max(0, Math.min(posY, 234));
+
+    alma.style.left = posX + 'px';
+    alma.style.top = posY + 'px';
+}
+
+function trocarSprite(estado) {
+    if (estado === "idle")  spriteInimigo.src = "sprites/zero_idle.png";
+    if (estado === "ataque") spriteInimigo.src = "sprites/zero_attack.gif";
+    if (estado === "dano") {
+        spriteInimigo.src = "sprites/zero_hit.gif";
+        setTimeout(() => trocarSprite("idle"), 400);
+    }
+}
+
+function mostrarMenu() {
+    turno = "menu";
+    caixaTexto.innerHTML =
+        `> O que você fará?<br><br>` +
         `1 - FIGHT<br>` +
         `2 - ACT`;
 }
-showMenu();
+mostrarMenu();
 
-function playerFight() {
-    setEnemySprite("hurt")
+function atacarJogador() {
+    trocarSprite("dano");
 
-    enemy.hp -= 4;
-    textBox.textContent = `Você atacou! ${enemy.name} perdeu 4 HP.`;
+    inimigo.vida -= 4;
+    caixaTexto.textContent = `Você atacou! ${inimigo.nome} perdeu 4 HP.`;
 
-    if (enemy.hp <= 0) {
-        victory();
+    if (inimigo.vida <= 0) {
+        vitoria();
         return;
     }
 
-    enemy.anger++;
-    setTimeout(enemyAttack, 1200);
+    inimigo.agressividade++;
+    setTimeout(ataqueInimigo, 1200);
 }
 
-function playerAct() {
-    if (enemy.anger > 1) enemy.anger--;
+function agirJogador() {
+    if (inimigo.agressividade > 1) inimigo.agressividade--;
 
-    textBox.textContent =
-        `Você fala gentilmente com ${enemy.name}...` +
-        `\nEle parece menos agressivo.`
+    caixaTexto.textContent =
+        `Você tenta conversar com ${inimigo.nome}...` +
+        `\nEle parece um pouco menos agressivo.`;
 
-    if (enemy.anger === 0) {
-        enemy.pacified = true;
-        victory();
+    if (inimigo.agressividade === 0) {
+        inimigo.pacificado = true;
+        vitoria();
         return;
     }
 
-    setTimeout(enemyAttack, 1200);
+    setTimeout(ataqueInimigo, 1200);
 }
 
-function enemyAttack() {
-    setEnemySprite("attack")
+function ataqueInimigo() {
+    trocarSprite("ataque");
 
-    textBox.textContent = `${enemy.name} está atacando!`;
-    turn = "enemy";
+    turno = "inimigo";
+    caixaTexto.textContent = `${inimigo.nome} está atacando!`;
 
-    let pattern = enemy.anger + 1;
+    let intervaloTiro = setInterval(spawnBala, 300);
 
-    let shootInterval = setInterval(() => spawnBullet(), 400);
-    let time = 0;
-
-    let attackDuration = 1800 + enemy.anger * 500;
+    let duracaoAtaque = 2600 + inimigo.agressividade * 600;
 
     setTimeout(() => {
-        clearInterval(shootInterval);
-        setEnemySprite("idle");
-        textBox.textContent = `O ataque acabou.`;
-        turn = "menu";
-        setTimeout(showMenu, 1000);
-    }, attackDuration);
+        clearInterval(intervaloTiro);
+        trocarSprite("idle");
 
+        caixaTexto.textContent = `O ataque acabou.`;
+        turno = "menu";
+
+        setTimeout(mostrarMenu, 1000);
+    }, duracaoAtaque);
 }
 
-function spawnBullet() {
-    if (gameOver || turn !== "enemy") return;
+function spawnBala() {
+    if (jogoAcabou || turno !== "inimigo") return;
 
-    const bullet = document.createElement('div');
-    bullet.classList.add('bullet');
+    const bala = document.createElement('div');
+    bala.classList.add('bullet');
 
-    bullet.style.left = Math.random() * 390 + 'px';
-    bullet.style.top = '0px';
+    bala.style.left = Math.random() * 390 + 'px';
+    bala.style.top = '0px';
 
-    battleBox.appendChild(bullet);
-    bullets.push({ el: bullet, x: parseFloat(bullet.style.left), y: 0 });
+    caixaBatalha.appendChild(bala);
+    balas.push({ el: bala, x: parseFloat(bala.style.left), y: 0 });
 }
 
-function updateBullets() {
-    bullets.forEach((b) => {
-        b.y += bulletSpeed;
+function atualizarBalas() {
+    balas.forEach((b) => {
+        b.y += velocidadeBala;
         b.el.style.top = b.y + 'px';
 
         // Colisão
-        const dx = (x + 8) - (b.x + 5);
-        const dy = (y + 8) - (b.y + 5);
+        const dx = (posX + 8) - (b.x + 5);
+        const dy = (posY + 8) - (b.y + 5);
 
-        if (Math.sqrt(dx * dx + dy * dy) < 12 && !invulnerable && !gameOver && turn === "enemy") {
-            takeDamage();
+        if (Math.sqrt(dx * dx + dy * dy) < 12 && !invulneravel && !jogoAcabou && turno === "inimigo") {
+            levarDano();
         }
 
         if (b.y > 260) b.el.remove();
     });
 }
 
-function takeDamage() {
-    lives--;
-    renderLives();
-    invulnerable = true;
+function levarDano() {
+    vidas--;
+    renderizarVidas();
+    invulneravel = true;
 
-    soul.style.filter = 'grayscale(100%)';
-    textBox.textContent = `Você foi atingido! Vidas: ${lives}`;
+    alma.style.backgroundColor = 'gray';
+    caixaTexto.textContent = `Você foi atingido! Vidas: ${vidas}`;
 
     setTimeout(() => {
-        soul.style.filter = 'none';
-        invulnerable = false;
+        alma.style.backgroundColor = 'red';
+        invulneravel = false;
     }, 800);
 
-    if (lives <= 0) {
-        deathScreen();
-    }
+    if (vidas <= 0) fimDeJogo();
 }
 
-function deathScreen() {
-    gameOver = true;
-    textBox.textContent = '💀 GAME OVER 💀';
-    soul.style.backgroundColor = 'black';
+function fimDeJogo() {
+    jogoAcabou = true;
+    caixaTexto.textContent = 'GAME OVER';
+    alma.style.backgroundColor = 'black';
 }
 
-function victory() {
-    gameOver = true;
+function vitoria() {
+    jogoAcabou = true;
 
-    if (enemy.pacified) {
-        textBox.textContent = `Você acalmou ${enemy.name}. Vitória pacífica!`;
+    if (inimigo.pacificado) {
+        caixaTexto.textContent = `Você acalmou ${inimigo.nome}. Vitória pacífica!`;
     } else {
-        textBox.textContent = `${enemy.name} foi derrotado.`;
+        caixaTexto.textContent = `${inimigo.nome} foi derrotado!`;
     }
 
-    soul.style.backgroundColor = 'yellow';
+    alma.style.backgroundColor = 'yellow';
 }
 
-// Loop
-function gameLoop() {
-    if (!gameOver) updateBullets();
-    requestAnimationFrame(gameLoop);
+function loopJogo() {
+    moverAlma();
+    atualizarBalas();
+    requestAnimationFrame(loopJogo);
 }
-gameLoop();
+loopJogo();

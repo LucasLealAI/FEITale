@@ -6,23 +6,23 @@ body {
     overflow: hidden;
 }
 
-#battle-box {
+#caixaBatalha {
     border: 4px solid white;
     width: 400px;
     height: 250px;
-    margin: 50px auto;
+    margin: 30px auto;
     position: relative;
     overflow: hidden;
 }
 
-#soul {
+#alma {
     width: 20px;
     height: 20px;
     background-image: url('sprites/soul.png');
-    background-size: contain; 
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    
+
     position: absolute;
     bottom: 10px;
     left: 190px;
@@ -30,26 +30,26 @@ body {
 
 #enemy-box {
     width: 200px;
-    height: 120px;
+    height: 140px;
     margin: 0 auto;
-    margin-top: -40px;
+    margin-top: 10px;
 }
 
-#enemy-sprite {
+#spriteInimigo {
     image-rendering: pixelated;
-    width: 90px;
-    height: 150px;
+    width: 100px;
+    height: auto;
 }
 
 .bullet {
-    width: 10px;
+    width: 30px;
     height: 10px;
-    background-color: white;
+    background-color: yellow;
     position: absolute;
     border-radius: 50%;
 }
 
-#text-box {
+#caixaTexto {
     border: 2px solid white;
     width: 400px;
     margin: 20px auto;
@@ -57,7 +57,7 @@ body {
     height: 60px;
 }
 
-#lives {
+#vidasDiv {
     margin-top: 10px;
 }
 
@@ -68,6 +68,7 @@ body {
     background-color: red;
     margin: 2px;
     transform: rotate(45deg);
+    position: relative;
 }
 
 .heart::before,
